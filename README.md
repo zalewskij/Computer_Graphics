@@ -25,6 +25,6 @@ Other:
 2. Load/Save created filters from file
 3. Saving new images
 
-Resources:
+## Resources:
 1. https://youtu.be/C_zFhWdM4ic  
 2. https://doc.qt.io/all-topics.html  
