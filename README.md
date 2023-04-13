@@ -27,7 +27,7 @@ Color Quantization:
 1. Octree color quantization
 
 Histogram operation:
-1. Historgram stretching
+1. Histogram stretching
 2. Histogram equalization
 
 Other: 
