@@ -20,6 +20,16 @@ Convolutional filter:
 5. Emboss
 6. Edge Detection
 
+Dithering:
+1. Random Dithering
+
+Color Quantization:
+1. Octree color quantization
+
+Histogram operation:
+1. Histogram stretching
+2. Histogram equalization
+
 Other: 
 1. Editable field for custom convolutional filters
 2. Load/Save created filters from file
