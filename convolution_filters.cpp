@@ -9,6 +9,7 @@ ConvolutionFilters::ConvolutionFilters(){}
 
 //function filters
 QPixmap ConvolutionFilters::applyFilter(QPixmap pixmap, int (*func)(int)){
+
     int w = pixmap.width();
     int h = pixmap.height();
     QImage img = pixmap.toImage();

@@ -9,6 +9,9 @@
 #include <algorithm>
 #include "convolution_filters.h"
 #include "function_filters.h"
+#include "dithering.h"
+#include "octree.h"
+#include "histogram.h"
 #include <fstream>
 #include <QFile>
 #include <QTextStream>
@@ -44,8 +47,8 @@ void MainWindow::on_loadFileButton_clicked()
     //resize to screen size and showstd:vecttor width heigth
     int w = ui->originalImage->width();
     int h = ui->originalImage->height();
-    ui->originalImage ->setPixmap(this->originalPixmap.scaled(w,h, Qt::KeepAspectRatio));
-    ui->modifiedImage ->setPixmap(this->modifiedPixmap.scaled(w,h, Qt::KeepAspectRatio));
+    ui->originalImage ->setPixmap(this->originalPixmap);//.scaled(w,h, Qt::KeepAspectRatio));
+    ui->modifiedImage ->setPixmap(this->modifiedPixmap);//.scaled(w,h, Qt::KeepAspectRatio));
 }
 
 void MainWindow::on_saveFileButton_clicked(){
@@ -59,7 +62,7 @@ void MainWindow::on_resetButton_clicked()
     this->modifiedPixmap = this->originalPixmap;
     int w = ui->originalImage->width();
     int h = ui->originalImage->height();
-    ui->modifiedImage->setPixmap(this->originalPixmap.scaled(w,h, Qt::KeepAspectRatio));
+    ui->modifiedImage->setPixmap(this->originalPixmap);//.scaled(w,h, Qt::KeepAspectRatio));
 }
 
 void MainWindow::on_expandImageButton_clicked()
@@ -68,79 +71,12 @@ void MainWindow::on_expandImageButton_clicked()
     this->update(this->modifiedPixmap);
 }
 
+
+// GUI utilities, custom kernel filters
 void MainWindow::update(QPixmap pixmap){
     int w = ui->modifiedImage->width();
     int h = ui->modifiedImage->height();
-    ui->modifiedImage->setPixmap(pixmap.scaled(w,h, Qt::KeepAspectRatio));
-}
-
-
-
-//Function Filters
-void MainWindow::on_inversionButton_clicked()
-{
-    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::inversion);
-    this->update(this->modifiedPixmap);
-}
-
-void MainWindow::on_brightnessButton_clicked()
-{
-    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::brightness);
-    this->update(this->modifiedPixmap);
-}
-
-void MainWindow::on_contrastButton_clicked()
-{
-    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::contrast);
-    this->update(this->modifiedPixmap);
-}
-
-void MainWindow::on_gammaButton_clicked()
-{
-    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::gamma);
-    this->update(this->modifiedPixmap);
-}
-
-//Kernel convolution
-void MainWindow::on_gaussianBlurButton_clicked()
-{
-    std::vector <std::vector<int>> filter = {{1,2,1}, {2,4,2}, {1,2,1}};
-    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 16, 0.0, 1,1);
-    this->update(this->modifiedPixmap);
-}
-
-
-void MainWindow::on_meanBlurButton_clicked()
-{
-    double bias = ui->biasSpinBox->value();
-    std::vector <std::vector<int>> filter = {{1,1,1}, {1,1,1}, {1,1,1}};
-    this->modifiedPixmap = ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 9.0, bias, 1,1);
-    this->update(this->modifiedPixmap);
-}
-
-
-void MainWindow::on_edgeDetectionButton_clicked()
-{
-    std::vector <std::vector<int>> filter = {{0,-1,0}, {0,1,0}, {0,0,0}};
-    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 0.2, 0.0, 1,1);
-    this->update(this->modifiedPixmap);
-}
-
-
-void MainWindow::on_sharpenButton_clicked()
-{
-    std::vector <std::vector<int>> filter = {{0,-1,0}, {-1,5,-1}, {0,-1,0}};
-    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter,1, 0.0, 1,1);
-    this->update(this->modifiedPixmap);
-}
-
-
-void MainWindow::on_embossButton_clicked()
-{
-    std::vector <std::vector<int>> filter = {{-1,-1,0}, {-1,1,1}, {0,1,1}};
-    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 1, 0.0, 1,1);
-    this->update(this->modifiedPixmap);
-
+    ui->modifiedImage->setPixmap(pixmap);//.scaled(w,h, Qt::KeepAspectRatio));
 }
 
 //non-standard filters
@@ -283,8 +219,35 @@ void MainWindow::on_loadFilterButton_clicked()
     }
 }
 
+void MainWindow::on_computeWeightButton_clicked()
+{
+    std::vector <std::vector <int> > filter = filterFieldToVector();
+    qDebug()<<ConvolutionFilters::computeDivisor(filter);
+    ui->weightSpinBox->setValue(ConvolutionFilters::computeDivisor(filter));
+}
 
-void MainWindow::on_labBlurButton_clicked()
+
+
+//convolution filters
+void MainWindow::on_actionGaussian_blur_triggered()
+{
+    double bias = ui->biasSpinBox->value();
+    std::vector <std::vector<int>> filter = {{1,2,1}, {2,4,2}, {1,2,1}};
+    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 16, bias, 1,1);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionMean_Blur_triggered()
+{
+    double bias = ui->biasSpinBox->value();
+    std::vector <std::vector<int>> filter = {{1,1,1}, {1,1,1}, {1,1,1}};
+    this->modifiedPixmap = ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 9.0, bias, 1,1);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionEdge_Preserving_Blur_triggered()
 {
     std::vector <std::vector <int> > filter(7, std::vector<int>(7, 1));
     this->modifiedPixmap=  ConvolutionFilters::convolve2d_v2(this->modifiedPixmap, filter, 0.0, 3,3);
@@ -292,10 +255,94 @@ void MainWindow::on_labBlurButton_clicked()
 }
 
 
-void MainWindow::on_computeWeightButton_clicked()
+void MainWindow::on_actionEdge_Detection_triggered()
 {
-    std::vector <std::vector <int> > filter = filterFieldToVector();
-    qDebug()<<ConvolutionFilters::computeDivisor(filter);
-    ui->weightSpinBox->setValue(ConvolutionFilters::computeDivisor(filter));
+    std::vector <std::vector<int>> filter = {{0,-1,0}, {0,1,0}, {0,0,0}};
+    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 0.2, 0.0, 1,1);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionSharpen_triggered()
+{
+    std::vector <std::vector<int>> filter = {{0,-1,0}, {-1,5,-1}, {0,-1,0}};
+    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter,1, 0.0, 1,1);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionEmboss_triggered()
+{
+    std::vector <std::vector<int>> filter = {{-1,-1,0}, {-1,1,1}, {0,1,1}};
+    this->modifiedPixmap=  ConvolutionFilters::convolve2d(this->modifiedPixmap, filter, 1, 0.0, 1,1);
+    this->update(this->modifiedPixmap);
+}
+
+
+
+//Functional filters
+void MainWindow::on_actionInversion_triggered()
+{
+    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::inversion);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionBrightness_Correction_triggered()
+{
+    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::brightness);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionContrast_triggered()
+{
+    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::contrast);
+    this->update(this->modifiedPixmap);
+}
+
+void MainWindow::on_actionGamma_triggered()
+{
+    this->modifiedPixmap = FunctionFilters::applyFilter(this->modifiedPixmap, FunctionFilters::gamma);
+    this->update(this->modifiedPixmap);
+}
+
+
+//Dithering, grayscale conversion
+void MainWindow::on_actionRandom_Dithering_triggered()
+{
+    this->modifiedPixmap=  Dithering::randomDithering(this->modifiedPixmap, ui->colorsPerChannelSpinBox->value());
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionLumosity_triggered()
+{
+    this->modifiedPixmap=  FunctionFilters::rgbToGrayscale(this->modifiedPixmap);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionoctree_triggered()
+{
+    int N = ui->ColorSpinBox->value();
+    octree *tree = new octree(this->modifiedPixmap, N);
+    this->modifiedPixmap = tree->colorQuantization(this->modifiedPixmap);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionHistogram_stretching_triggered()
+{
+    this->modifiedPixmap=  Histogram::histogramStretching(this->modifiedPixmap);
+    this->update(this->modifiedPixmap);
+}
+
+
+void MainWindow::on_actionHistogram_equalization_triggered()
+{
+    this->modifiedPixmap=  Histogram::histogramEqualization(this->modifiedPixmap);
+    this->update(this->modifiedPixmap);
+
 }
 

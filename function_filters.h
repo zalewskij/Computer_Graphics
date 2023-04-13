@@ -11,6 +11,7 @@ class FunctionFilters
 public:
     FunctionFilters();
     static QPixmap applyFilter(QPixmap pixmap, int (*func)(int));
+    static QPixmap rgbToGrayscale(QPixmap pixmap);
     static int inversion(int value);
     static int brightness(int value);
     static int contrast(int value);

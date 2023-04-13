@@ -23,29 +23,11 @@ private:
 private slots:
     void on_loadFileButton_clicked();
 
-    void on_inversionButton_clicked();
-
-    void on_brightnessButton_clicked();
-
-    void on_contrastButton_clicked();
-
     void on_resetButton_clicked();
-
-    void on_gammaButton_clicked();
-
-    void on_gaussianBlurButton_clicked();
 
     void on_saveFileButton_clicked();
 
     void on_expandImageButton_clicked();
-
-    void on_meanBlurButton_clicked();
-
-    void on_edgeDetectionButton_clicked();
-
-    void on_sharpenButton_clicked();
-
-    void on_embossButton_clicked();
 
     void updateFilterField();
 
@@ -63,9 +45,37 @@ private slots:
 
     void on_loadFilterButton_clicked();
 
-    void on_labBlurButton_clicked();
-
     void on_computeWeightButton_clicked();
+
+    void on_actionRandom_Dithering_triggered();
+
+    void on_actionLumosity_triggered();
+
+    void on_actionoctree_triggered();
+
+    void on_actionGaussian_blur_triggered();
+
+    void on_actionMean_Blur_triggered();
+
+    void on_actionEdge_Preserving_Blur_triggered();
+
+    void on_actionEdge_Detection_triggered();
+
+    void on_actionSharpen_triggered();
+
+    void on_actionEmboss_triggered();
+
+    void on_actionInversion_triggered();
+
+    void on_actionBrightness_Correction_triggered();
+
+    void on_actionContrast_triggered();
+
+    void on_actionGamma_triggered();
+
+    void on_actionHistogram_stretching_triggered();
+
+    void on_actionHistogram_equalization_triggered();
 
 private:
     Ui::MainWindow *ui;

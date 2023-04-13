@@ -21,6 +21,12 @@ set(PROJECT_SOURCES
         convolution_filters.h
         function_filters.cpp
         function_filters.h
+        octree.cpp
+        octree.h
+        dithering.cpp
+        dithering.h
+        histogram.cpp
+        histogram.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
