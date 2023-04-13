@@ -2,7 +2,6 @@
 #include "function_filters.h"
 #include "convolution_filters.h"
 #include <QApplication>
-#include<QDebug>
 
 int main(int argc, char *argv[])
 {

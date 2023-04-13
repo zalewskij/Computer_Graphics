@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1293</width>
-    <height>1049</height>
+    <height>844</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -105,125 +105,11 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>730</x>
-      <y>360</y>
-      <width>511</width>
-      <height>198</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="convolutionFiltersLayout">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Convolution filters:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="gaussianBlurButton">
-       <property name="text">
-        <string>Gaussian Blur</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="meanBlurButton">
-       <property name="text">
-        <string>Mean Blur</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="labBlurButton">
-       <property name="text">
-        <string>Edge Preserving Blur</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="edgeDetectionButton">
-       <property name="text">
-        <string>Edge Detection</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="sharpenButton">
-       <property name="text">
-        <string>Sharpen</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="embossButton">
-       <property name="text">
-        <string>Emboss</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_4">
-    <property name="geometry">
-     <rect>
-      <x>730</x>
-      <y>160</y>
-      <width>511</width>
-      <height>181</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="functionalFiltersLayout">
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Function filters:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="inversionButton">
-       <property name="text">
-        <string>Inversion</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="brightnessButton">
-       <property name="text">
-        <string>Brightness Correction</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="contrastButton">
-       <property name="text">
-        <string>Contrast Enhancement</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="gammaButton">
-       <property name="text">
-        <string>Gamma Correction</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QWidget" name="verticalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>590</y>
+      <x>730</x>
+      <y>190</y>
       <width>177</width>
       <height>390</height>
      </rect>
@@ -343,12 +229,67 @@
     <property name="geometry">
      <rect>
       <x>920</x>
-      <y>590</y>
+      <y>190</y>
       <width>331</width>
       <height>291</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="kernelGridLayout"/>
+   </widget>
+   <widget class="QSpinBox" name="ColorSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>550</y>
+      <width>45</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>2</number>
+    </property>
+    <property name="maximum">
+     <number>1024</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>520</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>octree colors</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>520</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>k dithering</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="colorsPerChannelSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>550</y>
+      <width>45</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>2</number>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -361,7 +302,135 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDithering">
+    <property name="title">
+     <string>Dithering</string>
+    </property>
+    <addaction name="actionRandom_Dithering"/>
+   </widget>
+   <widget class="QMenu" name="menuGrayscale">
+    <property name="title">
+     <string>Grayscale</string>
+    </property>
+    <addaction name="actionLumosity"/>
+   </widget>
+   <widget class="QMenu" name="menuColor_quantization">
+    <property name="title">
+     <string>Color quantization</string>
+    </property>
+    <addaction name="actionoctree"/>
+   </widget>
+   <widget class="QMenu" name="menuFuctionFilters">
+    <property name="title">
+     <string> Function filters</string>
+    </property>
+    <addaction name="actionInversion"/>
+    <addaction name="separator"/>
+    <addaction name="actionBrightness_Correction"/>
+    <addaction name="actionContrast"/>
+    <addaction name="actionGamma"/>
+   </widget>
+   <widget class="QMenu" name="menuconvolution">
+    <property name="title">
+     <string>Convolution</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionGaussian_blur"/>
+    <addaction name="actionMean_Blur"/>
+    <addaction name="actionEdge_Preserving_Blur"/>
+    <addaction name="actionEdge_Detection"/>
+    <addaction name="actionSharpen"/>
+    <addaction name="actionEmboss"/>
+   </widget>
+   <widget class="QMenu" name="menuLab">
+    <property name="title">
+     <string>Lab</string>
+    </property>
+    <addaction name="actionHistogram_stretching"/>
+    <addaction name="actionHistogram_equalization"/>
+   </widget>
+   <addaction name="menuDithering"/>
+   <addaction name="menuGrayscale"/>
+   <addaction name="menuColor_quantization"/>
+   <addaction name="menuFuctionFilters"/>
+   <addaction name="menuconvolution"/>
+   <addaction name="menuLab"/>
   </widget>
+  <action name="actionRandom_Dithering">
+   <property name="text">
+    <string>Random Dithering</string>
+   </property>
+  </action>
+  <action name="actionLumosity">
+   <property name="text">
+    <string>Lumosity</string>
+   </property>
+  </action>
+  <action name="actionoctree">
+   <property name="text">
+    <string>octree</string>
+   </property>
+  </action>
+  <action name="actionInversion">
+   <property name="text">
+    <string>Inversion</string>
+   </property>
+  </action>
+  <action name="actionBrightness_Correction">
+   <property name="text">
+    <string>Brightness Correction</string>
+   </property>
+  </action>
+  <action name="actionContrast">
+   <property name="text">
+    <string>Contrast</string>
+   </property>
+  </action>
+  <action name="actionGamma">
+   <property name="text">
+    <string>Gamma</string>
+   </property>
+  </action>
+  <action name="actionGaussian_blur">
+   <property name="text">
+    <string>Gaussian blur</string>
+   </property>
+  </action>
+  <action name="actionMean_Blur">
+   <property name="text">
+    <string>Mean Blur</string>
+   </property>
+  </action>
+  <action name="actionEdge_Preserving_Blur">
+   <property name="text">
+    <string>Edge Preserving Blur</string>
+   </property>
+  </action>
+  <action name="actionEdge_Detection">
+   <property name="text">
+    <string>Edge Detection</string>
+   </property>
+  </action>
+  <action name="actionSharpen">
+   <property name="text">
+    <string>Sharpen</string>
+   </property>
+  </action>
+  <action name="actionEmboss">
+   <property name="text">
+    <string>Emboss</string>
+   </property>
+  </action>
+  <action name="actionHistogram_stretching">
+   <property name="text">
+    <string>Histogram stretching</string>
+   </property>
+  </action>
+  <action name="actionHistogram_equalization">
+   <property name="text">
+    <string>Histogram equalization</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
